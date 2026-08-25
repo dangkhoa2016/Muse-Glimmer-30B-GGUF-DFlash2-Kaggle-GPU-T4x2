@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Run deterministic contract suite (CPU-only)
+        run: ./demo-smoke.sh
+      - name: Run public contract unit tests
+        run: python3 tests/test_public_contract.py
+      - name: Validate shell syntax
+        run: |
+          for f in serve.sh expose.sh external.sh readiness.sh doctor.sh release-export.sh demo-smoke.sh package-llama-runtime.sh scripts/*.sh; do bash -n "$f"; done
+      - name: Validate Python compilation
+        run: python3 -m py_compile scripts/*.py tests/*.py
+      - name: Check source manifest consistency
+        run: python3 -B scripts/source_manifest.py check --root .
+      - name: Audit project version singleton
+        run: python3 .github/scripts/check_project_version.py
+      - name: Validate bilingual documentation
+        run: python3 .github/scripts/check_bilingual.py
+      - name: Scan internal development artifacts
+        run: python3 .github/scripts/check_internal_artifacts.py
+      - name: Scan secrets
+        run: python3 .github/scripts/check_secrets.py
+      - name: Scan tracked large files
+        run: python3 .github/scripts/check_large_files.py
+      - name: Validate GitHub metadata
+        run: python3 .github/scripts/check_metadata.py
