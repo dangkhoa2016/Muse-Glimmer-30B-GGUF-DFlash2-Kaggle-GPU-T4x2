@@ -1,0 +1,44 @@
+---
+name: Feature request
+description: Suggest an improvement (English or Vietnamese ok)
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing an improvement. This project is a deliberately
+        deterministic reference implementation, so please be explicit about the
+        motivation, scope, and impact on runtime behavior.
+        Cảm ơn bạn đã đề xuất cải tiến. Đây là reference implementation cố ý
+        deterministic, hãy nêu rõ động cơ, phạm vi và tác động tới hành vi runtime.
+  - type: input
+    id: motivation
+    attributes:
+      label: Motivation / Động cơ
+      description: What problem does this solve, and for whom?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed scope / Phạm vi đề xuất
+      description: What changes, where (files/entrypoints), and what stays untouched.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact on runtime behavior / Tác động tới hành vi runtime
+      description: >
+        Explicitly declare if this changes generation defaults, SSE/`[DONE]`,
+        busy/429 semantics, admission slots, model selection, GPU split, CUDA
+        flags, the llama.cpp revision, or the prompt/template behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered / Giải pháp thay thế đã cân nhắc
+    validations:
+      required: false

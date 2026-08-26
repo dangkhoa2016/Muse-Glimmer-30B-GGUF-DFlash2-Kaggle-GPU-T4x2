@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support / Hỗ trợ
+    url: https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/blob/main/SUPPORT.md
+    about: How to get help before opening an issue.
+  - name: Security policy / Chính sách bảo mật
+    url: https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/blob/main/SECURITY.md
+    about: Report vulnerabilities privately. Thông báo lỗ hổng một cách riêng tư.

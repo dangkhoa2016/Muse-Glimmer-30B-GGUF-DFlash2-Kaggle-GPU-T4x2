@@ -1,0 +1,66 @@
+---
+name: Bug report
+description: Report a defect (English or Vietnamese ok)
+title: "[Bug] "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill in as much as possible. Never paste secrets, tokens, passwords, or `.env` values.
+        Vui lòng điền nhiều thông tin tốt nhất có thể. Không dán secrets, token, mật khẩu hay giá trị `.env`.
+  - type: input
+    id: environment
+    attributes:
+      label: Environment / Môi trường
+      description: Kaggle session type, GPU (T4 x2?), Python version, cloudflared version if used.
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Kaggle / runtime detail
+      description: e.g. GPU notebook session, accelerator "GPU T4 x2", datasets attached.
+    validations:
+      required: false
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU
+      description: Output of `./external.sh status --format env` (GPU_COUNT, MODEL) if possible.
+    validations:
+      required: false
+  - type: input
+    id: command
+    attributes:
+      label: Exact command(s) run / (Các) lệnh chính xác đã chạy
+      description: e.g. `export MUSE_API_TOKEN=...; ./external.sh start`
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps / Các bước tái hiện
+      description: Step-by-step from a fresh clone/session.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior / Hành vi mong đợi
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / Hành vi thực tế
+      description: Include error messages, HTTP status codes, and JSON error envelopes.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs / Log liên quan
+      description: from `artifacts/runtime-state/*.log` or the terminal — redact credentials first.
+    validations:
+      required: false
