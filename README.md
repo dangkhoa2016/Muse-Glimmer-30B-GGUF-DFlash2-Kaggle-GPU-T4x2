@@ -136,22 +136,33 @@ Controller entrypoints:
 
 ## Model files
 
-| Role | Filename | Size | SHA-256 |
-| --- | --- | --- | --- |
-| Target (primary) | `Muse-Glimmer-30B-Q4_K_M.gguf` | 17,306,324,000 B | `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
-| DFlash2 draft | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` | 1,645,657,280 B | `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+Attach these **exact Kaggle resources**. The names below are not generic search hints; they identify the public inputs used by the canonical Kaggle production notebook.
 
-Expected placement (Kaggle inputs under `/kaggle/input`):
+| Role | Kaggle type | Resource | Required variation/version | Required file | Size | SHA-256 |
+| --- | --- | --- | --- | --- | ---: | --- |
+| Target (primary) | Kaggle Model | [`dangkhoa2016/bartowski-muse-glimmer-30b-gguf`](https://www.kaggle.com/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / `1`** | `Muse-Glimmer-30B-Q4_K_M.gguf` | 17,306,324,000 B | `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
+| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/default/1) | **GGUF / `default` / `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` | 1,645,657,280 B | `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+| llama.cpp runtime | Kaggle Dataset | [`dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime`](https://www.kaggle.com/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime) | dataset | pinned prebuilt CUDA runtime tree | — | verified by the runtime manifest |
 
-- Target model dataset: `bartowski-muse-glimmer-30b-gguf`
-- DFlash2 draft dataset: `incoai-muse-glimmer-30b-dflash2-gguf`
-- Prebuilt CUDA llama.cpp runtime dataset: `muse-glimmer-30b-dflash2-llama-runtime`
+> **Important:** the DFlash2 Kaggle variation is named `default`; the exact file inside it is the qualified `Q4_K_M` DFlash2 draft. Do not substitute another variation simply because its name looks more explicit.
 
-The backend reads the attached target model **in place** (no copy beside the
-venv/lock state) and resolves the draft by exact filename inside the attached
-input root. Serving is intentionally **exact**: verifiable-fallback model
-substitution is disabled for the persistent server, and both model identities
-are re-validated by size and SHA-256 before every start.
+### How to attach them in Kaggle
+
+1. Open your Kaggle notebook and choose **Add Input**.
+2. Add the target **Model** from the direct link above and select **GGUF → `q4-k-m` → version `1`**.
+3. Add the DFlash2 **Model** and select **GGUF → `default` → version `1`**.
+4. Add the llama.cpp runtime **Dataset**.
+5. Keep all three attached when you use **Restart Session → Run All**.
+
+The final qualified T4 x2 run resolved them under paths shaped like:
+
+```text
+/kaggle/input/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/gguf/q4-k-m/1/Muse-Glimmer-30B-Q4_K_M.gguf
+/kaggle/input/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/gguf/default/1/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
+/kaggle/input/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime
+```
+
+Kaggle may change the outer mount layout, so the notebook and runtime discover nested inputs recursively. The backend reads the attached target model **in place** and resolves the draft by exact filename. Serving remains exact: both model identities are re-validated by size and SHA-256 before every start.
 
 ## Integrity / hash verification
 
@@ -170,8 +181,8 @@ in strict mode:
 Manual verification of the attached model files:
 
 ```bash
-sha256sum /kaggle/input/bartowski-muse-glimmer-30b-gguf/*/Muse-Glimmer-30B-Q4_K_M.gguf
-sha256sum /kaggle/input/incoai-muse-glimmer-30b-dflash2-gguf/*/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
+find /kaggle/input -type f -name 'Muse-Glimmer-30B-Q4_K_M.gguf' -print -exec sha256sum {} \;
+find /kaggle/input -type f -name 'Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf' -print -exec sha256sum {} \;
 ```
 
 ## Canonical production notebook
@@ -186,7 +197,7 @@ See [`docs/KAGGLE_PRODUCTION.md`](docs/KAGGLE_PRODUCTION.md) for the operator co
 
 ```bash
 # 1) Create a Kaggle notebook/session with the "GPU T4 x2" accelerator.
-# 2) Attach the three Kaggle inputs from "Model files".
+# 2) Attach the exact Kaggle resources/variations from "Model files".
 # 3) Clone this repository into /kaggle/working.
 
 git clone https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2.git

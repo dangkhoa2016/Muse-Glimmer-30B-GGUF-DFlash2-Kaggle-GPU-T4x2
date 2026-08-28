@@ -135,22 +135,33 @@ Các entrypoint điều khiển:
 
 ## Tệp mô hình
 
-| Vai trò | Tên tệp | Kích thước | SHA-256 |
-| --- | --- | --- | --- |
-| Target (chính) | `Muse-Glimmer-30B-Q4_K_M.gguf` | 17.306.324.000 B | `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
-| DFlash2 draft | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` | 1.645.657.280 B | `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+Hãy đính kèm **chính xác các Kaggle resource dưới đây**. Các tên này không phải gợi ý tìm kiếm chung; chúng xác định đúng public input được canonical Kaggle production notebook sử dụng.
 
-Vị trí dự kiến (Kaggle inputs dưới `/kaggle/input`):
+| Vai trò | Loại Kaggle | Resource | Variation/version bắt buộc | File bắt buộc | Kích thước | SHA-256 |
+| --- | --- | --- | --- | --- | ---: | --- |
+| Target (chính) | Kaggle Model | [`dangkhoa2016/bartowski-muse-glimmer-30b-gguf`](https://www.kaggle.com/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / `1`** | `Muse-Glimmer-30B-Q4_K_M.gguf` | 17.306.324.000 B | `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
+| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/default/1) | **GGUF / `default` / `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` | 1.645.657.280 B | `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+| llama.cpp runtime | Kaggle Dataset | [`dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime`](https://www.kaggle.com/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime) | dataset | cây CUDA runtime dựng sẵn đã pin | — | được runtime manifest xác minh |
 
-- Dataset mô hình target: `bartowski-muse-glimmer-30b-gguf`
-- Dataset DFlash2 draft: `incoai-muse-glimmer-30b-dflash2-gguf`
-- Dataset runtime llama.cpp CUDA dựng sẵn: `muse-glimmer-30b-dflash2-llama-runtime`
+> **Quan trọng:** variation DFlash2 trên Kaggle có tên `default`; file chính xác bên trong là DFlash2 draft `Q4_K_M` đã được qualification. Không tự thay sang variation khác chỉ vì tên của nó trông rõ ràng hơn.
 
-Backend đọc target model đính kèm **tại chỗ** (không copy thừa ngoài venv/state
-lock) và giải quyết draft theo tên tệp chính xác trong input root đính kèm.
-Serving chủ đích là **exact**: không có mô hình fallback thay thế cho persistent
-server, và cả hai định danh mô hình được kiểm lại theo kích thước và SHA-256
-trước mỗi lần start.
+### Cách đính kèm trên Kaggle
+
+1. Mở Kaggle notebook và chọn **Add Input**.
+2. Thêm target **Model** từ link trực tiếp ở trên và chọn **GGUF → `q4-k-m` → version `1`**.
+3. Thêm DFlash2 **Model** và chọn **GGUF → `default` → version `1`**.
+4. Thêm llama.cpp runtime **Dataset**.
+5. Giữ cả ba input được attach khi dùng **Restart Session → Run All**.
+
+Final T4 x2 run đã qualification thành công resolve chúng theo dạng:
+
+```text
+/kaggle/input/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/gguf/q4-k-m/1/Muse-Glimmer-30B-Q4_K_M.gguf
+/kaggle/input/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/gguf/default/1/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
+/kaggle/input/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime
+```
+
+Kaggle có thể thay đổi lớp mount bên ngoài, vì vậy notebook và runtime chủ động tìm đệ quy các input lồng nhau. Backend đọc target model đính kèm **tại chỗ** và resolve draft theo exact filename. Serving vẫn là exact: cả hai model identity đều được kiểm lại theo kích thước và SHA-256 trước mỗi lần start.
 
 ## Xác minh toàn vẹn / hash
 
@@ -169,8 +180,8 @@ strict đều xác minh:
 Xác minh thủ công tệp mô hình đính kèm:
 
 ```bash
-sha256sum /kaggle/input/bartowski-muse-glimmer-30b-gguf/*/Muse-Glimmer-30B-Q4_K_M.gguf
-sha256sum /kaggle/input/incoai-muse-glimmer-30b-dflash2-gguf/*/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
+find /kaggle/input -type f -name 'Muse-Glimmer-30B-Q4_K_M.gguf' -print -exec sha256sum {} \;
+find /kaggle/input -type f -name 'Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf' -print -exec sha256sum {} \;
 ```
 
 ## Notebook production canonical
@@ -185,7 +196,7 @@ Xem [`docs/KAGGLE_PRODUCTION.vi.md`](docs/KAGGLE_PRODUCTION.vi.md) để biết 
 
 ```bash
 # 1) Tạo notebook/session Kaggle với accelerator "GPU T4 x2".
-# 2) Đính kèm ba Kaggle inputs trong "Tệp mô hình".
+# 2) Đính kèm đúng các Kaggle resource/variation trong "Tệp mô hình".
 # 3) Clone repository này vào /kaggle/working.
 
 git clone https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2.git
