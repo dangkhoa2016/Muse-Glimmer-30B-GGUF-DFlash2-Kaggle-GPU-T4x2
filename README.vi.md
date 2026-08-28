@@ -173,6 +173,14 @@ sha256sum /kaggle/input/bartowski-muse-glimmer-30b-gguf/*/Muse-Glimmer-30B-Q4_K_
 sha256sum /kaggle/input/incoai-muse-glimmer-30b-dflash2-gguf/*/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
 ```
 
+## Notebook production canonical
+
+Để chạy production-style trên Kaggle theo hướng dẫn đầy đủ, sử dụng [`notebooks/kaggle-production.ipynb`](notebooks/kaggle-production.ipynb).
+
+Notebook xác minh T4 x2 hardware gate, model/runtime inputs đính kèm, frozen source identity `v1.0.0`, xử lý Bearer token an toàn, real non-stream và SSE generation, Quick Tunnel transport tùy chọn, evidence và cleanup.
+
+Xem [`docs/KAGGLE_PRODUCTION.vi.md`](docs/KAGGLE_PRODUCTION.vi.md) để biết operator contract và các release qualification gate.
+
 ## Khởi động nhanh trên Kaggle T4x2
 
 ```bash

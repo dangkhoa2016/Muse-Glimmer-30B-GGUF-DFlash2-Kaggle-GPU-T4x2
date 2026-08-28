@@ -174,6 +174,14 @@ sha256sum /kaggle/input/bartowski-muse-glimmer-30b-gguf/*/Muse-Glimmer-30B-Q4_K_
 sha256sum /kaggle/input/incoai-muse-glimmer-30b-dflash2-gguf/*/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
 ```
 
+## Canonical production notebook
+
+For a guided production-style Kaggle run, use [`notebooks/kaggle-production.ipynb`](notebooks/kaggle-production.ipynb).
+
+The notebook validates the T4 x2 hardware gate, attached model/runtime inputs, frozen `v1.0.0` source identity, secure Bearer-token handling, real non-stream and SSE generation, optional Quick Tunnel transport, evidence, and cleanup.
+
+See [`docs/KAGGLE_PRODUCTION.md`](docs/KAGGLE_PRODUCTION.md) for the operator contract and release qualification gates.
+
 ## Kaggle T4x2 quick start
 
 ```bash
