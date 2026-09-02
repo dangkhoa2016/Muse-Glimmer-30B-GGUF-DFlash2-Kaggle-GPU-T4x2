@@ -1,4 +1,4 @@
-# Muse-Glimmer-30B
+# Muse-Glimmer-30B GGUF + DFlash2 trên Kaggle T4x2
 > 🌐 Language / Ngôn ngữ: [English](README.md) | **Tiếng Việt**
 
 ![Release](https://img.shields.io/badge/release-v1.0.0-blue)
@@ -6,18 +6,29 @@
 ![CI](https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/actions/workflows/ci.yml/badge.svg)
 ![Kaggle T4x2](https://img.shields.io/badge/kaggle-T4x2-orange)
 ![NVIDIA T4 x2](https://img.shields.io/badge/nvidia-T4%20x2-lightgray)
+![llama.cpp](https://img.shields.io/badge/runtime-llama.cpp-606060)
+![DFlash2](https://img.shields.io/badge/speculative-DFlash2-606060)
+![OpenAI compatible](https://img.shields.io/badge/API-OpenAI--compatible-606060)
 ![Self-hosted](https://img.shields.io/badge/reference-self--hosted-606060)
 
-> **Repository này KHÔNG cung cấp dịch vụ inference hosted dùng chung.**
-> **Người dùng tự chạy toàn bộ stack trên tài khoản/hạ tầng Kaggle của chính
-> họ và tự tiêu thụ GPU quota của mình.**
+**Stack inference tự host bằng `llama.cpp` cho Muse-Glimmer-30B GGUF, được tăng tốc bằng DFlash2 speculative decoding trên Kaggle NVIDIA T4 x2 và cung cấp qua API gateway có xác thực tương thích OpenAI.**
 
-Muse-Glimmer-30B là một reference implementation tự-host, tái lập được
-(reproducible), cung cấp một inference gateway tương thích OpenAI cho họ GGUF
-`Muse-Glimmer-30B` trên phiên notebook Kaggle có **hai GPU NVIDIA T4 (Kaggle
-"GPU T4 x2")**. Stack kết hợp một backend `llama-server` loopback được bảo vệ
-chặt chẽ với DFlash2 speculative decoding và một reverse proxy xác thực bằng
-Bearer, phơi bày một HTTP API nhỏ, xác định (deterministic).
+> **Đây không phải repository upstream của model Muse-Glimmer-30B.**
+> Repository này cung cấp serving stack tái lập được, runtime đã pin, authenticated gateway, Kaggle production notebook và operator workflow để chạy model trên compute của chính bạn.
+
+### Inference stack canonical
+
+- **Target model:** `Muse-Glimmer-30B-Q4_K_M.gguf`
+- **Draft model:** `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf`
+- **Inference runtime:** `llama.cpp` với CUDA
+- **Tăng tốc:** DFlash2 speculative decoding
+- **Compute đã qualification:** Kaggle NVIDIA **T4 x2**
+- **API:** chat completions tương thích OpenAI với SSE streaming
+- **Lớp truy cập:** gateway xác thực bằng Bearer token
+- **Public transport tùy chọn:** Cloudflare Quick Tunnel
+
+> **Repository này không cung cấp dịch vụ inference hosted dùng chung.**
+> **Người dùng tự chạy stack trên tài khoản/hạ tầng Kaggle của mình và tự sử dụng GPU quota của mình.**
 
 ---
 

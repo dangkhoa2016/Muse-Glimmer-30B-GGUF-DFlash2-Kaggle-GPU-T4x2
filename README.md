@@ -1,4 +1,4 @@
-# Muse-Glimmer-30B
+# Muse-Glimmer-30B GGUF + DFlash2 on Kaggle T4x2
 > 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](README.vi.md)
 
 ![Release](https://img.shields.io/badge/release-v1.0.0-blue)
@@ -6,18 +6,29 @@
 ![CI](https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/actions/workflows/ci.yml/badge.svg)
 ![Kaggle T4x2](https://img.shields.io/badge/kaggle-T4x2-orange)
 ![NVIDIA T4 x2](https://img.shields.io/badge/nvidia-T4%20x2-lightgray)
+![llama.cpp](https://img.shields.io/badge/runtime-llama.cpp-606060)
+![DFlash2](https://img.shields.io/badge/speculative-DFlash2-606060)
+![OpenAI compatible](https://img.shields.io/badge/API-OpenAI--compatible-606060)
 ![Self-hosted](https://img.shields.io/badge/reference-self--hosted-606060)
 
-> **This repository does not provide a shared hosted inference service.**
-> **Users run the stack on their own Kaggle account/infrastructure and consume
-> their own GPU quota.**
+**Self-hosted `llama.cpp` inference stack for Muse-Glimmer-30B GGUF, accelerated with DFlash2 speculative decoding on Kaggle NVIDIA T4 x2 and exposed through an authenticated OpenAI-compatible API gateway.**
 
-Muse-Glimmer-30B is a reproducible, self-hosted reference implementation of an
-OpenAI-compatible inference gateway for the `Muse-Glimmer-30B` GGUF family on a
-Kaggle notebook session with **two NVIDIA T4 GPUs (Kaggle "GPU T4 x2")**. It
-combines a hardened loopback-only `llama-server` backend with DFlash2
-speculative decoding and a Bearer-authenticated reverse proxy that exposes a
-small, deterministic HTTP API.
+> **This is not the upstream Muse-Glimmer-30B model repository.**
+> This repository provides the reproducible serving stack, pinned runtime, authenticated gateway, Kaggle production notebook, and operator workflow required to run the model on your own compute.
+
+### Canonical inference stack
+
+- **Target model:** `Muse-Glimmer-30B-Q4_K_M.gguf`
+- **Draft model:** `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf`
+- **Inference runtime:** `llama.cpp` with CUDA
+- **Acceleration:** DFlash2 speculative decoding
+- **Validated compute:** Kaggle NVIDIA **T4 x2**
+- **API:** OpenAI-compatible chat completions with SSE streaming
+- **Access layer:** Bearer-authenticated gateway
+- **Optional public transport:** Cloudflare Quick Tunnel
+
+> **This repository does not provide a shared hosted inference service.**
+> **Users run the stack on their own Kaggle account/infrastructure and consume their own GPU quota.**
 
 ---
 

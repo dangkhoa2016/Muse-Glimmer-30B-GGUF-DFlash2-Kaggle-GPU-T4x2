@@ -46,6 +46,9 @@ recorded in this file.
   guidelines, code of conduct, security policy, dependabot configuration, and
   a CI workflow that runs on `actions/checkout@v7` (and `actions/setup-python@v7`).
 
+- **Canonical Kaggle production notebook:** a bilingual guided notebook validates the exact T4 x2 hardware, target/draft/runtime inputs, authenticated gateway, real non-stream and SSE generation, optional public transport, evidence, and cleanup.
+- **Explicit public input identities and release packaging:** exact Kaggle resources/variations are linked, and the GitHub Release publishes deterministic source, notebook, evidence, and checksum assets.
+
 ### Key contract
 
 - **API:** `GET /health`, `GET /ready`, `GET /v1/models`,

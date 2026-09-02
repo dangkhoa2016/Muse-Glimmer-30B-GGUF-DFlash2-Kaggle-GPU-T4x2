@@ -44,6 +44,9 @@ trong tệp này.
   of conduct, security policy, cấu hình dependabot, và CI chạy trên
   `actions/checkout@v7` (và `actions/setup-python@v7`).
 
+- **Canonical Kaggle production notebook:** notebook song ngữ có hướng dẫn xác minh exact T4 x2 hardware, target/draft/runtime inputs, authenticated gateway, real non-stream và SSE generation, public transport tùy chọn, evidence và cleanup.
+- **Public input identity và release packaging tường minh:** link chính xác Kaggle resource/variation được công bố, và GitHub Release publish deterministic source, notebook, evidence cùng checksum assets.
+
 ### Contract chính
 
 - **API:** `GET /health`, `GET /ready`, `GET /v1/models`,
