@@ -13,9 +13,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
+      - name: Validate public commit messages
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            git fetch origin "$PR_HEAD_SHA"
+            python3 .github/scripts/check_commit_messages.py --range "origin/$BASE_REF..$PR_HEAD_SHA" --skip-identity
+          else
+            python3 .github/scripts/check_commit_messages.py --range HEAD
+          fi
       - name: Run deterministic contract suite (CPU-only)
         run: ./demo-smoke.sh
       - name: Run public contract unit tests
