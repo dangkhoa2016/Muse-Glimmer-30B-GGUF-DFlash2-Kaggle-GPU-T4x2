@@ -6,8 +6,10 @@ CI can verify them without any runtime workload.
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
+import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +30,33 @@ def check(name: str, ok: bool, detail: str = "") -> None:
 def main() -> int:
     version = ROOT.joinpath("VERSION").read_text(encoding="utf-8").strip()
     check("project version singleton", version == PUBLIC_VERSION, f"VERSION={version!r}")
+
+
+    notebook_path = ROOT / "notebooks" / "kaggle-production.ipynb"
+    notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
+    notebook_meta = notebook.get("metadata", {}).get("muse_glimmer", {})
+    notebook_code = "\n".join(
+        cell.get("source", "")
+        for cell in notebook.get("cells", [])
+        if cell.get("cell_type") == "code"
+    )
+    check("notebook release identity metadata is version based",
+          notebook_meta.get("expected_version") == PUBLIC_VERSION
+          and "expected_head" not in notebook_meta
+          and "expected_tree" not in notebook_meta)
+    check("notebook release identity removes hardcoded commit and tree pins",
+          "EXPECTED_HEAD" not in notebook_code
+          and "EXPECTED_TREE" not in notebook_code)
+    check("notebook release identity resolves annotated tag",
+          'tag_object_type = run(["git", "cat-file", "-t", tag_ref]' in notebook_code
+          and 'tag_target = run(["git", "rev-parse", f"{tag_ref}^{{commit}}"], cwd=WORKDIR)' in notebook_code
+          and 'assert tag_object_type == "tag"' in notebook_code
+          and 'assert head == tag_target' in notebook_code)
+    check("notebook release identity verifies version manifest and clean worktree",
+          'release_version == EXPECTED_VERSION' in notebook_code
+          and 'SESSION["resolved_tag_target"] = tag_target' in notebook_code
+          and 'SESSION["worktree_clean"] = True' in notebook_code
+          and 'SESSION.get("source_manifest") == "PASS"' in notebook_code)
 
     license_text = ROOT.joinpath("LICENSE").read_text(encoding="utf-8")
     check("MIT license header", "MIT License" in license_text)
@@ -101,6 +130,11 @@ def main() -> int:
 
     print(f"\npassed={TOTAL - len(FAILURES)} failed={len(FAILURES)}")
     return 1 if FAILURES else 0
+
+
+class PublicContractTests(unittest.TestCase):
+    def test_public_contract(self):
+        self.assertEqual(main(), 0)
 
 
 if __name__ == "__main__":
