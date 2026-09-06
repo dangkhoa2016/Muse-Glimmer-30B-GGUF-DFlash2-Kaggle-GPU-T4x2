@@ -122,7 +122,7 @@ def main() -> int:
     notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
     notebook_meta = notebook.get("metadata", {}).get("muse_glimmer", {})
     notebook_code = "\n".join(
-        cell.get("source", "")
+        "".join(cell.get("source", "")) if isinstance(cell.get("source", ""), list) else cell.get("source", "")
         for cell in notebook.get("cells", [])
         if cell.get("cell_type") == "code"
     )
@@ -174,14 +174,14 @@ def main() -> int:
     check("venv fallback marker uses visible stderr transport",
           "echo 'VENV_ENSUREPIP_FALLBACK=USED' >&2" in bootstrap_venv)
     check("notebook enforces venv log polish evidence gate",
-          notebook_meta.get("venv_log_polish_contract")
-          == "warning_marker_parity+raw_ensurepip_error_suppression"
-          and 'VENV_FALLBACK_MARKER = "VENV_ENSUREPIP_FALLBACK=USED"' in notebook_code
-          and "venv_fallback_warning_seen == venv_fallback_marker_seen" in notebook_code
-          and 'SESSION["venv_log_polish_gate"] = "PASS"' in notebook_code
-          and "VENV_RAW_ENSUREPIP_ERROR_SUPPRESSED=PASS" in notebook_code
-          and "VENV_LOG_POLISH_GATE=PASS" in notebook_code
-          and "FINAL_VENV_LOG_POLISH_GATE" in notebook_code)
+      notebook_meta.get("venv_log_polish_contract")
+      == "warning_marker_parity+raw_ensurepip_error_suppression"
+      and 'VENV_FALLBACK_MARKER = "VENV_ENSUREPIP_FALLBACK=USED"' in notebook_code
+      and "venv_fallback_warning_seen == venv_fallback_marker_seen" in notebook_code
+      and 'SESSION["venv_log_polish_gate"] = "PASS"' in notebook_code
+      and "VENV_RAW_ENSUREPIP_ERROR_SUPPRESSED=PASS" in notebook_code
+      and "VENV_LOG_POLISH_GATE=PASS" in notebook_code
+      and "FINAL_VENV_LOG_POLISH_GATE" in notebook_code)
 
     venv_transport = exercise_venv_fallback_log_transport()
     check("venv fallback marker survives stdout command substitution",
@@ -204,7 +204,7 @@ def main() -> int:
     kaggle_en = ROOT.joinpath("docs/KAGGLE_PRODUCTION.md").read_text(encoding="utf-8")
     kaggle_vi = ROOT.joinpath("docs/KAGGLE_PRODUCTION.vi.md").read_text(encoding="utf-8")
     notebook_markdown = "\n".join(
-        cell.get("source", "")
+        "".join(cell.get("source", "")) if isinstance(cell.get("source", ""), list) else cell.get("source", "")
         for cell in notebook.get("cells", [])
         if cell.get("cell_type") == "markdown"
     )

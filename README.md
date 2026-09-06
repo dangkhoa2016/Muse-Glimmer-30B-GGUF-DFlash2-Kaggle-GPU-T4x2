@@ -204,6 +204,26 @@ The notebook validates the T4 x2 hardware gate, attached model/runtime inputs, f
 
 See [`docs/KAGGLE_PRODUCTION.md`](docs/KAGGLE_PRODUCTION.md) for the operator contract and release qualification gates.
 
+## Publication evidence
+
+The successful real Kaggle T4 x2 publication run is preserved separately from
+the release-build/export evidence:
+
+- [publication evidence ZIP](https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/releases/download/v1.0.0/muse-glimmer-30b-v1.0.0-publication-evidence.zip)
+- [ZIP SHA-256 sidecar](https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/releases/download/v1.0.0/muse-glimmer-30b-v1.0.0-publication-evidence.zip.sha256)
+- [reviewer summary](https://github.com/dangkhoa2016/Muse-Glimmer-30B-GGUF-DFlash2-Kaggle-GPU-T4x2/releases/download/v1.0.0/muse-glimmer-30b-v1.0.0-review-summary.txt)
+
+Outer ZIP SHA-256: `131d1bfcd4365e5c03c07feec3b969e558bbd2f846b65a416454e80a81cf2ca6`.
+
+The bundle proves the recorded T4 x2 run, model hashes, dual-GPU model
+residency, authenticated API behavior, non-stream + SSE inference, semantic
+sanity, observed DFlash2 speculative activity, secret scanning, and cleanup.
+It does not claim DFlash2 speedup versus a matched baseline.
+
+See [`docs/PUBLICATION_EVIDENCE.md`](docs/PUBLICATION_EVIDENCE.md) for the
+evidence chain, verification commands, claim boundary, and the distinction
+between the clean reusable notebook source and the executed run artifact.
+
 ## Kaggle T4x2 quick start
 
 ```bash

@@ -14,6 +14,11 @@ A complete run validates:
 - exactly two NVIDIA T4 GPUs with the required visible VRAM;
 - the exact target GGUF, DFlash2 draft GGUF, and prebuilt llama.cpp runtime inputs;
 - the frozen `v1.0.0` Git source identity and `SOURCE_MANIFEST.sha256`;
+- full SHA-256 verification of both target and DFlash2 GGUF files;
+- successful model-memory residency on both T4 GPUs after backend load;
+- one deterministic semantic sanity request in addition to deployment prompts;
+- observed DFlash2 drafted/accepted counters for all real inference requests;
+- Stop / Reset / Re-run lifecycle controls for repeated tests in the same notebook;
 - secure `MUSE_API_TOKEN` handling, including a temporary-file fallback when a Kaggle Secret is unavailable;
 - the canonical local backend and Bearer-authenticated gateway;
 - one real non-streaming generation with visible assistant content;
@@ -73,20 +78,38 @@ KAGGLE_T4X2_GATE=PASS
 ATTACHED_INPUT_GATE=PASS
 FROZEN_SOURCE_IDENTITY=PASS
 CANONICAL_ENVIRONMENT=PASS
+MODEL_SHA256_GATE=PASS
+DUAL_GPU_MEMORY_RESIDENCY=PASS
 LOCAL_AUTH_GATEWAY=PASS
 LOCAL_NONSTREAM_DEMO=PASS
 LOCAL_SSE_DEMO=PASS
+SEMANTIC_SANITY_GATE=PASS
+DFLASH2_ACTIVITY_GATE=PASS
 VISIBLE_ANSWER_GATE=PASS
 CORE_PRODUCTION_DEMO=PASS
 PUBLIC_QUICK_TUNNEL=PASS
+PUBLICATION_SECRET_SCAN=PASS
+PUBLICATION_ARTIFACT_BUNDLE=PASS
 OVERALL_PRODUCTION_DEMO=PASS
 AUTO_CLEANUP=PASS
 GENERATED_TOKEN_CLEANUP=PASS
-FORENSIC_CAPTURE_COUNT=0
-FINAL_FORENSIC_ZIP=NOT_CREATED_THIS_RUN
+RERUN_SAME_NOTEBOOK=SUPPORTED
 FINAL_NOTEBOOK_RESULT=PASS
 NOTEBOOK_EXECUTION_COMPLETED=PASS
 ```
+
+## Publication evidence
+
+The canonical successful run is documented in
+[`PUBLICATION_EVIDENCE.md`](PUBLICATION_EVIDENCE.md). The evidence bundle is a
+GitHub Release asset, not a tracked repository blob, so Git history remains
+small and the release-build evidence stays distinct from executed-run evidence.
+
+The clean notebook source can be reused for repeated tests. Use `muse_stop()`
+to stop notebook-owned services or `muse_reset(...)` to clear runtime state,
+then run the notebook again. The recorded publication evidence represents one
+successful qualification run and does not claim a separately qualified second
+full Run All.
 
 ## Publication rule
 

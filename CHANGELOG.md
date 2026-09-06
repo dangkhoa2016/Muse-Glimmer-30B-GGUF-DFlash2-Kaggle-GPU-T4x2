@@ -48,6 +48,8 @@ recorded in this file.
 
 - **Canonical Kaggle production notebook:** a bilingual guided notebook validates the exact T4 x2 hardware, target/draft/runtime inputs, authenticated gateway, real non-stream and SSE generation, optional public transport, evidence, and cleanup.
 - **Explicit public input identities and release packaging:** exact Kaggle resources/variations are linked, and the GitHub Release publishes deterministic source, notebook, evidence, and checksum assets.
+- **Qualified publication-run evidence:** the successful real Kaggle T4 x2 run is published as a separately checksummed release asset with reviewer summary, model hashes, dual-GPU residency, real non-stream/SSE output, semantic sanity, DFlash2 counters, secret scanning, and cleanup evidence.
+- **Reusable notebook lifecycle:** the clean production notebook includes explicit Stop / Reset / Re-run controls so operators can repeat tests in the same Kaggle notebook without creating a replacement notebook.
 
 ### Key contract
 

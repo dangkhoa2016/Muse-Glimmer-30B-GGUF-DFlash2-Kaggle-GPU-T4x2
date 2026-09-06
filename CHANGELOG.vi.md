@@ -47,6 +47,9 @@ trong tệp này.
 - **Canonical Kaggle production notebook:** notebook song ngữ có hướng dẫn xác minh exact T4 x2 hardware, target/draft/runtime inputs, authenticated gateway, real non-stream và SSE generation, public transport tùy chọn, evidence và cleanup.
 - **Public input identity và release packaging tường minh:** link chính xác Kaggle resource/variation được công bố, và GitHub Release publish deterministic source, notebook, evidence cùng checksum assets.
 
+- **Publication-run evidence đã qualification:** successful run thực trên Kaggle T4 x2 được publish thành release asset có checksum riêng cùng reviewer summary, model hash, dual-GPU residency, non-stream/SSE output thực, semantic sanity, DFlash2 counter, secret scanning và cleanup evidence.
+- **Lifecycle notebook tái sử dụng:** production notebook sạch có Stop / Reset / Re-run control tường minh để operator test lặp lại trên cùng notebook Kaggle mà không phải tạo notebook thay thế.
+
 ### Contract chính
 
 - **API:** `GET /health`, `GET /ready`, `GET /v1/models`,

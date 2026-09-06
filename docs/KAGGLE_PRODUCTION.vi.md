@@ -14,6 +14,11 @@ Một lần chạy đầy đủ xác minh:
 - đúng hai GPU NVIDIA T4 với lượng VRAM khả dụng theo yêu cầu;
 - exact target GGUF, DFlash2 draft GGUF và prebuilt llama.cpp runtime inputs;
 - frozen Git source identity của `v1.0.0` và `SOURCE_MANIFEST.sha256`;
+- full SHA-256 verification cho cả target và DFlash2 GGUF;
+- model-memory residency thành công trên cả hai GPU T4 sau khi backend load;
+- một deterministic semantic sanity request ngoài các deployment prompt;
+- counter DFlash2 drafted/accepted quan sát được cho mọi inference request thực;
+- Stop / Reset / Re-run lifecycle controls để test lặp lại trên cùng notebook;
 - xử lý `MUSE_API_TOKEN` an toàn, bao gồm fallback bằng file tạm khi Kaggle Secret không khả dụng;
 - backend local canonical và gateway xác thực bằng Bearer;
 - một real non-streaming generation có visible assistant content;
@@ -73,20 +78,39 @@ KAGGLE_T4X2_GATE=PASS
 ATTACHED_INPUT_GATE=PASS
 FROZEN_SOURCE_IDENTITY=PASS
 CANONICAL_ENVIRONMENT=PASS
+MODEL_SHA256_GATE=PASS
+DUAL_GPU_MEMORY_RESIDENCY=PASS
 LOCAL_AUTH_GATEWAY=PASS
 LOCAL_NONSTREAM_DEMO=PASS
 LOCAL_SSE_DEMO=PASS
+SEMANTIC_SANITY_GATE=PASS
+DFLASH2_ACTIVITY_GATE=PASS
 VISIBLE_ANSWER_GATE=PASS
 CORE_PRODUCTION_DEMO=PASS
 PUBLIC_QUICK_TUNNEL=PASS
+PUBLICATION_SECRET_SCAN=PASS
+PUBLICATION_ARTIFACT_BUNDLE=PASS
 OVERALL_PRODUCTION_DEMO=PASS
 AUTO_CLEANUP=PASS
 GENERATED_TOKEN_CLEANUP=PASS
-FORENSIC_CAPTURE_COUNT=0
-FINAL_FORENSIC_ZIP=NOT_CREATED_THIS_RUN
+RERUN_SAME_NOTEBOOK=SUPPORTED
 FINAL_NOTEBOOK_RESULT=PASS
 NOTEBOOK_EXECUTION_COMPLETED=PASS
 ```
+
+## Bằng chứng publication
+
+Successful run canonical được mô tả trong
+[`PUBLICATION_EVIDENCE.vi.md`](PUBLICATION_EVIDENCE.vi.md). Evidence bundle là
+GitHub Release asset chứ không phải blob được track trong repository, nhờ đó
+Git history vẫn gọn và release-build evidence được tách rõ khỏi executed-run
+evidence.
+
+Notebook source sạch có thể dùng lại để test nhiều lần. Dùng `muse_stop()` để
+dừng service thuộc ownership của notebook hoặc `muse_reset(...)` để reset
+runtime state, sau đó chạy notebook lại. Publication evidence đã ghi nhận đại
+diện cho một qualification run thành công và không claim một full Run All lần
+hai đã được qualification riêng.
 
 ## Quy tắc publication
 
