@@ -152,24 +152,24 @@ Attach these **exact Kaggle resources**. The names below are not generic search 
 | Role | Kaggle type | Resource | Required variation/version | Required file | Size | SHA-256 |
 | --- | --- | --- | --- | --- | ---: | --- |
 | Target (primary) | Kaggle Model | [`dangkhoa2016/bartowski-muse-glimmer-30b-gguf`](https://www.kaggle.com/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / `1`** | `Muse-Glimmer-30B-Q4_K_M.gguf` | 17,306,324,000 B | `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
-| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/default/1) | **GGUF / `default` / `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` | 1,645,657,280 B | `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` | 1,645,657,280 B | `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
 | llama.cpp runtime | Kaggle Dataset | [`dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime`](https://www.kaggle.com/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime) | dataset | pinned prebuilt CUDA runtime tree | — | verified by the runtime manifest |
 
-> **Important:** the DFlash2 Kaggle variation is named `default`; the exact file inside it is the qualified `Q4_K_M` DFlash2 draft. Do not substitute another variation simply because its name looks more explicit.
+> **Important:** use the dedicated DFlash2 **GGUF / `q4-k-m` / `1`** variation for this production demo. It mounts only the required Q4_K_M draft (~1.65 GB). The `default` variation is a legacy all-in-one bundle containing Q4_K_M, Q8_0, and BF16 (about 10 GB total) and should not be attached for the canonical production run.
 
 ### How to attach them in Kaggle
 
 1. Open your Kaggle notebook and choose **Add Input**.
 2. Add the target **Model** from the direct link above and select **GGUF → `q4-k-m` → version `1`**.
-3. Add the DFlash2 **Model** and select **GGUF → `default` → version `1`**.
+3. Add the DFlash2 **Model** and select **GGUF → `q4-k-m` → version `1`**.
 4. Add the llama.cpp runtime **Dataset**.
 5. Keep all three attached when you use **Restart Session → Run All**.
 
-The final qualified T4 x2 run resolved them under paths shaped like:
+Kaggle mounts the canonical selections under paths shaped like (the outer mount layout may vary):
 
 ```text
 /kaggle/input/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/gguf/q4-k-m/1/Muse-Glimmer-30B-Q4_K_M.gguf
-/kaggle/input/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/gguf/default/1/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
+/kaggle/input/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/gguf/q4-k-m/1/Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf
 /kaggle/input/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime
 ```
 

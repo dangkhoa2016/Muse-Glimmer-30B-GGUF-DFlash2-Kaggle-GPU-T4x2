@@ -36,10 +36,10 @@ Attach the **exact** resources below before running the notebook:
 | Role | Type | Resource | Required selection | Required identity |
 | --- | --- | --- | --- | --- |
 | Target model | Kaggle Model | [`dangkhoa2016/bartowski-muse-glimmer-30b-gguf`](https://www.kaggle.com/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / version `1`** | `Muse-Glimmer-30B-Q4_K_M.gguf` — `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
-| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/default/1) | **GGUF / `default` / version `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` — `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / version `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` — `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
 | llama.cpp runtime | Kaggle Dataset | [`dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime`](https://www.kaggle.com/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime) | attach the dataset | pinned prebuilt CUDA runtime |
 
-The DFlash2 variation is intentionally `default`; the exact Q4_K_M draft filename and SHA-256 above are the authoritative identity.
+Use the dedicated DFlash2 `q4-k-m` variation for the canonical production notebook. It mounts only the required Q4_K_M draft (~1.65 GB). The `default` variation is a legacy all-in-one bundle containing Q4_K_M, Q8_0, and BF16 (about 10 GB total), so it is intentionally excluded from the production-demo input contract.
 
 In Kaggle, choose **Add Input**, open each direct link, and attach the specified Model variation/version or Dataset. Models may appear under `/kaggle/input/models/...` and datasets under `/kaggle/input/datasets/...`; the notebook discovers both recursively.
 
@@ -61,7 +61,7 @@ The directory uses mode `0700`, the file uses mode `0600`, the token value is ne
 
 1. Select **GPU T4 x2**.
 2. Enable Internet for the repository clone and optional Quick Tunnel.
-3. Use **Add Input** to attach the exact target Model (`q4-k-m/1`), DFlash2 Model (`default/1`), and runtime Dataset listed above.
+3. Use **Add Input** to attach the exact target Model (`q4-k-m/1`), DFlash2 Model (`q4-k-m/1`), and runtime Dataset listed above.
 4. Optionally configure `MUSE_API_TOKEN`.
 5. Use **Restart Session → Run All**.
 6. Review the final evidence and verdict lines before publishing notebook output.

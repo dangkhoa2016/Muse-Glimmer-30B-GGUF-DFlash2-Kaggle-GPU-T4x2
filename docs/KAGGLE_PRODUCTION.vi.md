@@ -36,10 +36,10 @@ Hãy attach **chính xác** các resource dưới đây trước khi chạy note
 | Vai trò | Loại | Resource | Lựa chọn bắt buộc | Identity bắt buộc |
 | --- | --- | --- | --- | --- |
 | Target model | Kaggle Model | [`dangkhoa2016/bartowski-muse-glimmer-30b-gguf`](https://www.kaggle.com/models/dangkhoa2016/bartowski-muse-glimmer-30b-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / version `1`** | `Muse-Glimmer-30B-Q4_K_M.gguf` — `0d3fc85f61d10fdc84072f0bba6005d61c1ac5605a2627b0fd5ea4ff8194c384` |
-| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/default/1) | **GGUF / `default` / version `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` — `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
+| DFlash2 draft | Kaggle Model | [`dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf`](https://www.kaggle.com/models/dangkhoa2016/incoai-muse-glimmer-30b-dflash2-gguf/Gguf/q4-k-m/1) | **GGUF / `q4-k-m` / version `1`** | `Muse-Glimmer-30B-DFlash2-Q4_K_M.gguf` — `93dbfb6f88e4645dec1347cf93f9d6fc80b90d413038722385b2a8e53565c949` |
 | llama.cpp runtime | Kaggle Dataset | [`dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime`](https://www.kaggle.com/datasets/dangkhoa2016/muse-glimmer-30b-dflash2-llama-runtime) | attach dataset | pinned prebuilt CUDA runtime |
 
-Variation DFlash2 chủ ý có tên `default`; exact Q4_K_M draft filename và SHA-256 ở trên mới là identity authoritative.
+Canonical production notebook sử dụng variation DFlash2 chuyên biệt `q4-k-m`, chỉ mount draft Q4_K_M cần thiết (~1,65 GB). Variation `default` là legacy all-in-one bundle chứa Q4_K_M, Q8_0 và BF16 (tổng khoảng 10 GB), nên bị loại khỏi production-demo input contract.
 
 Trong Kaggle, chọn **Add Input**, mở từng link trực tiếp rồi attach đúng Model variation/version hoặc Dataset đã chỉ định. Model có thể được mount dưới `/kaggle/input/models/...` và dataset dưới `/kaggle/input/datasets/...`; notebook tự động tìm đệ quy cả hai loại.
 
@@ -61,7 +61,7 @@ Thư mục dùng mode `0700`, file dùng mode `0600`, giá trị token không ba
 
 1. Chọn **GPU T4 x2**.
 2. Bật Internet để clone repository và dùng Quick Tunnel tùy chọn.
-3. Dùng **Add Input** để attach đúng target Model (`q4-k-m/1`), DFlash2 Model (`default/1`) và runtime Dataset đã liệt kê ở trên.
+3. Dùng **Add Input** để attach đúng target Model (`q4-k-m/1`), DFlash2 Model (`q4-k-m/1`) và runtime Dataset đã liệt kê ở trên.
 4. Tùy chọn cấu hình `MUSE_API_TOKEN`.
 5. Chạy **Restart Session → Run All**.
 6. Xem final evidence và các verdict trước khi publish notebook output.

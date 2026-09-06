@@ -11,12 +11,28 @@ fi
 rm -rf "$VENV_DIR"
 mkdir -p "$(dirname "$VENV_DIR")"
 echo "Creating venv: $VENV_DIR"
-if "$PYTHON_BIN" -m venv "$VENV_DIR"; then
+normal_venv_stderr="$(mktemp "${TMPDIR:-/tmp}/muse-venv-normal.XXXXXX")"
+fallback_venv_stderr="$(mktemp "${TMPDIR:-/tmp}/muse-venv-fallback.XXXXXX")"
+cleanup_venv_logs() { rm -f "$normal_venv_stderr" "$fallback_venv_stderr"; }
+trap cleanup_venv_logs EXIT
+if "$PYTHON_BIN" -m venv "$VENV_DIR" 2>"$normal_venv_stderr"; then
   :
 else
-  echo 'Normal venv creation failed (likely missing ensurepip); retrying with --without-pip.' >&2
+  echo 'WARNING: standard venv bootstrap could not complete; using ensurepip-less fallback.' >&2
+  echo 'VENV_ENSUREPIP_FALLBACK=USED' >&2
   rm -rf "$VENV_DIR"
-  "$PYTHON_BIN" -m venv --without-pip "$VENV_DIR"
+  set +e
+  "$PYTHON_BIN" -m venv --without-pip "$VENV_DIR" 2>"$fallback_venv_stderr"
+  fallback_venv_rc=$?
+  set -e
+  if (( fallback_venv_rc != 0 )); then
+    echo 'ERROR: ensurepip-less venv fallback also failed.' >&2
+    echo '--- standard venv stderr ---' >&2
+    cat "$normal_venv_stderr" >&2
+    echo '--- ensurepip-less fallback stderr ---' >&2
+    cat "$fallback_venv_stderr" >&2
+    exit "$fallback_venv_rc"
+  fi
 fi
 
 # Do not start the new interpreter yet. Kaggle's global sitecustomize imports
